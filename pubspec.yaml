@@ -36,7 +36,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   image_picker: ^1.1.2
+  camera: ^0.11.0+2
 
+  http: any
+  path: any
+  flutter_localization: ^0.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -47,6 +51,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -57,12 +64,32 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  generate: true
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/logo.png
+    - assets/images/logo2.png
+    - assets/images/login_background.png
+    - assets/images/logo_id.png
+    - assets/images/logo_malay.png
+    - assets/images/logo_en.png
+    - assets/images/check.png
+    - assets/images/snap.png
+    - assets/images/upload.png
+    - assets/images/find.png
+    - assets/images/feedback.png
+    - assets/images/language.png
+    - assets/images/camera_background.png
+    - assets/images/background_pointer.png
+    - assets/images/background_unpointer.png
+    - assets/images/rate1.png
+    - assets/images/rate2.png
+    - assets/images/rate3.png
+    - assets/images/rate4.png
+    - assets/images/rate5.png
+    # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
