@@ -89,7 +89,12 @@ flutter:
     - assets/images/rate3.png
     - assets/images/rate4.png
     - assets/images/rate5.png
-    # - images/a_dot_ham.jpeg
+    - assets/images/pegagan.jpg
+    - assets/images/brotowali.jpg
+    - assets/images/rambusa.jpg
+    - assets/images/tumpang-air.jpg
+    - assets/images/sembung-rambat.jpg
+    - assets/images/rumput-minjangan.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -102,11 +107,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
+        # - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

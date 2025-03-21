@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:leaves_classification_application/models/pegaganList.dart';
+import 'package:leaves_classification_application/models/tumpangAirList.dart';
 import 'package:leaves_classification_application/widgets/indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -63,7 +63,7 @@ class _ResultPage extends State<ResultPage> {
               children: [
                 Container(
                   width: MediaQuery.sizeOf(context).width * 0.2,
-                  height: MediaQuery.sizeOf(context).height * 0.4,
+                  height: MediaQuery.sizeOf(context).height * 0.3,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -90,7 +90,7 @@ class _ResultPage extends State<ResultPage> {
                       Positioned(
                         top: 80.0,
                         child: GestureDetector(
-                          onTap: () => _languageDialogBuilder(context),
+                          onTap: () => _rateDialogBulider(context),
                           child: Container(
                             width: 40.0,
                             height: 40.0,
@@ -114,7 +114,7 @@ class _ResultPage extends State<ResultPage> {
                       Positioned(
                         top: 130.0,
                         child: GestureDetector(
-                          onTap: () => _rateDialogBulider(context),
+                          onTap: () => _languageDialogBuilder(context),
                           child: Container(
                             width: 40.0,
                             height: 40.0,
@@ -140,11 +140,87 @@ class _ResultPage extends State<ResultPage> {
                 ),
                 Container(
                   width: MediaQuery.sizeOf(context).width * 0.8,
-                  height: MediaQuery.sizeOf(context).height * 0.4,
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.sizeOf(context).height * 0.02),
                   decoration: BoxDecoration(
                       color: Color.fromRGBO(94, 81, 233, 1),
                       borderRadius:
                           BorderRadius.only(bottomLeft: Radius.circular(30))),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 200,
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.sizeOf(context).width * 0.05),
+                        margin: EdgeInsets.only(
+                            top: MediaQuery.sizeOf(context).height * 0.05,
+                            bottom: MediaQuery.sizeOf(context).height * 0.015),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            "assets/images/tumpang-air.jpg",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: MediaQuery.sizeOf(context).width *
+                                        0.05),
+                                child: Text(
+                                  AppLocalizations.of(context)!.tumpang_air,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "DMSans"),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: MediaQuery.sizeOf(context).width * 0.05,
+                                ),
+                                child: Text(
+                                  "Peperomia pellucida",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "DMSans"),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      MediaQuery.sizeOf(context).width * 0.08),
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "100%",
+                                style: TextStyle(
+                                    fontFamily: "DMSans",
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -153,10 +229,34 @@ class _ResultPage extends State<ResultPage> {
               width: MediaQuery.sizeOf(context).width,
               margin: EdgeInsets.only(top: 20.0),
               padding: EdgeInsets.only(
-                  left: MediaQuery.sizeOf(context).width * 0.15),
+                  left: MediaQuery.sizeOf(context).width * 0.05),
+              child: Text(
+                AppLocalizations.of(context)!.description,
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: "DMSans",
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: 14.0, fontFamily: "DMSans"),
+                  AppLocalizations.of(context)!.tumpang_air_description),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              width: MediaQuery.sizeOf(context).width,
+              margin: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.sizeOf(context).width * 0.05),
               child: Text(
                 AppLocalizations.of(context)!.benefit,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: "DMSans",
+                    fontWeight: FontWeight.bold),
               ),
             ),
             Container(
@@ -165,10 +265,10 @@ class _ResultPage extends State<ResultPage> {
                   0.7, // Tinggi yang diinginkan
               margin: EdgeInsets.symmetric(vertical: 1.0),
               child: PageView.builder(
-                itemCount: PegaganList.length,
+                itemCount: TumpangAirList.length,
                 controller: _pageController,
                 itemBuilder: (context, index) {
-                  final plant = PegaganList[index];
+                  final plant = TumpangAirList[index];
                   var _scale = index == _currentPage ? 1.0 : 0.9;
                   return TweenAnimationBuilder(
                       tween: Tween(begin: _scale, end: _scale),
@@ -195,6 +295,7 @@ class _ResultPage extends State<ResultPage> {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 15,
+                                          fontFamily: "DMSans",
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
@@ -209,6 +310,7 @@ class _ResultPage extends State<ResultPage> {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 14,
+                                            fontFamily: "DMSans",
                                             fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.left,
                                       ),
@@ -252,273 +354,10 @@ class _ResultPage extends State<ResultPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ...List.generate(
-                    PegaganList.length,
+                    TumpangAirList.length,
                     (index) => Indicator(
                         isActive: _currentPage == index ? true : false))
               ],
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.only(top: 20.0),
-              padding: EdgeInsets.only(
-                  left: MediaQuery.sizeOf(context).width * 0.15),
-              child: Text(
-                AppLocalizations.of(context)!.how_to_process,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 239, 228, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '1',
-                      style: TextStyle(
-                          color: Color.fromRGBO(134, 164, 146, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                      child: Text(
-                    AppLocalizations.of(context)!.pegagan_process_1,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(236, 221, 252, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '2',
-                      style: TextStyle(
-                          color: Color.fromRGBO(182, 132, 230, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      AppLocalizations.of(context)!.pegagan_process_2,
-                      style: TextStyle(
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 239, 228, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '3',
-                      style: TextStyle(
-                          color: Color.fromRGBO(134, 164, 146, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                      child: Text(
-                    AppLocalizations.of(context)!.pegagan_process_3,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(236, 221, 252, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '4',
-                      style: TextStyle(
-                          color: Color.fromRGBO(182, 132, 230, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      AppLocalizations.of(context)!.pegagan_process_4,
-                      style: TextStyle(
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 239, 228, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '5',
-                      style: TextStyle(
-                          color: Color.fromRGBO(134, 164, 146, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                      child: Text(
-                    AppLocalizations.of(context)!.pegagan_process_5,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                  ))
-                ],
-              ),
             ),
           ],
         ),

@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:leaves_classification_application/result_page/rumput_minjangan_result.dart';
+import 'package:leaves_classification_application/result_page.dart';
+import 'package:leaves_classification_application/result_page/sembung_rambat_result.dart';
+import 'package:leaves_classification_application/welcome_page.dart';
 import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
 import 'package:leaves_classification_application/config/api.dart';
@@ -25,14 +27,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      locale: Locale('en'),
+      locale: Locale('id'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const RumputMinjanganResult(),
+      home: const WelcomePage(),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

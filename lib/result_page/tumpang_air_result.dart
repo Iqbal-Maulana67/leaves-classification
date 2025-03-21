@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:leaves_classification_application/models/brotowaliList.dart';
+import 'package:leaves_classification_application/models/tumpangAirList.dart';
 import 'package:leaves_classification_application/widgets/indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class BrotowaliResult extends StatefulWidget {
+class TumpangAirResult extends StatefulWidget {
   final double accuracy;
-
-  const BrotowaliResult({super.key, required this.accuracy});
+  const TumpangAirResult({super.key, required this.accuracy});
 
   @override
-  State<StatefulWidget> createState() => _BrotowaliResult();
+  State<StatefulWidget> createState() => _TumpangAirResult();
 }
 
-class _BrotowaliResult extends State<BrotowaliResult> {
+class _TumpangAirResult extends State<TumpangAirResult> {
   final PageController _pageController = PageController(viewportFraction: 0.75);
   late double _accuracy;
   int _currentPage = 0;
@@ -24,7 +23,6 @@ class _BrotowaliResult extends State<BrotowaliResult> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _accuracy = widget.accuracy;
 
     _pageController.addListener(() {
       final page = _pageController.page?.round() ?? 0;
@@ -165,7 +163,7 @@ class _BrotowaliResult extends State<BrotowaliResult> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
-                            "assets/images/brotowali.jpg",
+                            "assets/images/tumpang-air.jpg",
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -182,7 +180,7 @@ class _BrotowaliResult extends State<BrotowaliResult> {
                                     left: MediaQuery.sizeOf(context).width *
                                         0.05),
                                 child: Text(
-                                  AppLocalizations.of(context)!.brotowali,
+                                  AppLocalizations.of(context)!.tumpang_air,
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.white,
@@ -195,7 +193,7 @@ class _BrotowaliResult extends State<BrotowaliResult> {
                                   left: MediaQuery.sizeOf(context).width * 0.05,
                                 ),
                                 child: Text(
-                                  "Tinospora cordifolia",
+                                  "Peperomia pellucida",
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.white,
@@ -247,7 +245,7 @@ class _BrotowaliResult extends State<BrotowaliResult> {
               child: Text(
                   textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 14.0, fontFamily: "DMSans"),
-                  AppLocalizations.of(context)!.brotowali_description),
+                  AppLocalizations.of(context)!.tumpang_air_description),
             ),
             Container(
               alignment: Alignment.centerLeft,
@@ -269,10 +267,10 @@ class _BrotowaliResult extends State<BrotowaliResult> {
                   0.7, // Tinggi yang diinginkan
               margin: EdgeInsets.symmetric(vertical: 1.0),
               child: PageView.builder(
-                itemCount: BrotowaliList.length,
+                itemCount: TumpangAirList.length,
                 controller: _pageController,
                 itemBuilder: (context, index) {
-                  final plant = BrotowaliList[index];
+                  final plant = TumpangAirList[index];
                   var _scale = index == _currentPage ? 1.0 : 0.9;
                   return TweenAnimationBuilder(
                       tween: Tween(begin: _scale, end: _scale),
@@ -358,7 +356,7 @@ class _BrotowaliResult extends State<BrotowaliResult> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ...List.generate(
-                    BrotowaliList.length,
+                    TumpangAirList.length,
                     (index) => Indicator(
                         isActive: _currentPage == index ? true : false))
               ],
