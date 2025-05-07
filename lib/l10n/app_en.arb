@@ -5,6 +5,11 @@
     "benefit" : "Benefit",
     "description" : "Description",
     "how_to_process" : "How to Process",
+    "select_language" : "Select Language",
+    "choose" : "Choose",
+    "classification" : "Classification",
+    "camera" : "Camera",
+    "upload" : "Upload\nPicture",
 
     "pegagan" : "Gotu Kola",
     "pegagan_description" : "Gotu Kola, horsefoot leaves, or antanan (Latin: Centella Asiatica) is a wild plant that grows in plantations, fields, roadsides, and rice fields. The plant is native to tropical Asia, distributed in Southeast Asia including Indonesia, India, the People's Republic of China, Japan, Madagascar, and Australia and then spread to various other countries. Often used as a ground cover, it is sometimes eaten as a vegetable. Useful as a traditional medicine for various diseases.",

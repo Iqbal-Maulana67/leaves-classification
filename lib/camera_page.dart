@@ -5,13 +5,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:leaves_classification_application/result_page.dart';
 import 'package:leaves_classification_application/result_page/brotowali_result.dart';
 import 'package:leaves_classification_application/result_page/pegagan_result.dart';
 import 'package:leaves_classification_application/result_page/rambusa_result.dart';
 import 'package:leaves_classification_application/result_page/rumput_minjangan_result.dart';
 import 'package:leaves_classification_application/result_page/sembung_rambat_result.dart';
 import 'package:leaves_classification_application/result_page/tumpang_air_result.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -54,9 +54,9 @@ class _CameraPageState extends State<CameraPage> {
         _capturedImagePath = photo.path;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Foto berhasil diambil: ${photo.path}')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Foto berhasil diambil: ${photo.path}')),
+      // );
     }
   }
 
@@ -69,9 +69,9 @@ class _CameraPageState extends State<CameraPage> {
         _capturedImagePath = image.path;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gambar dipilih: ${image.path}')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Gambar dipilih: ${image.path}')),
+      // );
     }
   }
 
@@ -84,7 +84,8 @@ class _CameraPageState extends State<CameraPage> {
       return;
     }
 
-    var uri = Uri.parse("http://192.168.1.5:8000/api/predict-id/");
+    var uri = Uri.parse(
+        "https://0dbc-140-213-244-229.ngrok-free.app/api/predict-id/");
     var request = http.MultipartRequest('POST', uri)
       ..files
           .add(await http.MultipartFile.fromPath('gmbr', _capturedImagePath!));
@@ -198,21 +199,35 @@ class _CameraPageState extends State<CameraPage> {
           Container(
             alignment: Alignment.topCenter,
             width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height * 0.75,
             margin:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
             child: _capturedImagePath != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(30),
-                    child: Image.file(
-                      File(_capturedImagePath!),
+                    child: FittedBox(
                       fit: BoxFit.cover,
-                      width: MediaQuery.sizeOf(context).width,
+                      child: SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        height: MediaQuery.sizeOf(context).height * 0.7,
+                        child: Image.file(
+                          File(_capturedImagePath!),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   )
                 : _isCameraInitialized
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: CameraPreview(_cameraController!),
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: MediaQuery.sizeOf(context).width,
+                            height: MediaQuery.sizeOf(context).height * 0.75,
+                            child: CameraPreview(_cameraController!),
+                          ),
+                        ),
                       )
                     : const Center(child: CircularProgressIndicator()),
           ),
@@ -230,7 +245,8 @@ class _CameraPageState extends State<CameraPage> {
                   //   Navigator.push(
                   //       context,
                   //       MaterialPageRoute(
-                  //           builder: (context) => const ResultPage()));
+                  //           builder: (context) =>
+                  //               const TumpangAirResult(accuracy: 80.0)));
                   // },
                   onTap: _uploadImage,
                   child: Container(
@@ -244,7 +260,7 @@ class _CameraPageState extends State<CameraPage> {
                         height: 5.0,
                       ),
                       Text(
-                        'Klasifikasi',
+                        AppLocalizations.of(context)!.classification,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
                       ),
@@ -264,7 +280,7 @@ class _CameraPageState extends State<CameraPage> {
                         height: 5.0,
                       ),
                       Text(
-                        'Kamera',
+                        AppLocalizations.of(context)!.camera,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
                       ),
@@ -284,7 +300,7 @@ class _CameraPageState extends State<CameraPage> {
                         height: 5.0,
                       ),
                       Text(
-                        'Unggah\nGambar',
+                        AppLocalizations.of(context)!.upload,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white),
                       ),

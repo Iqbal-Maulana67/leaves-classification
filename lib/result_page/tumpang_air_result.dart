@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:leaves_classification_application/models/tumpangAirList.dart';
+import 'package:leaves_classification_application/provider/local_provider.dart';
 import 'package:leaves_classification_application/widgets/indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class TumpangAirResult extends StatefulWidget {
   final double accuracy;
@@ -23,6 +25,7 @@ class _TumpangAirResult extends State<TumpangAirResult> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _accuracy = widget.accuracy;
 
     _pageController.addListener(() {
       final page = _pageController.page?.round() ?? 0;
@@ -70,33 +73,12 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                     alignment: Alignment.center,
                     children: [
                       Positioned(
-                          top: 30.0,
-                          child: GestureDetector(
-                            onTap: () => _languageDialogBuilder(context),
-                            child: Container(
-                              width: 40.0,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(1, 1),
-                                        spreadRadius: 0.5,
-                                        blurRadius: 1)
-                                  ],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Icon(Icons.arrow_back),
-                            ),
-                          )),
-                      Positioned(
-                        top: 80.0,
+                        top: 30.0,
                         child: GestureDetector(
-                          onTap: () => _rateDialogBulider(context),
+                          onTap: () => {Navigator.pop(context)},
                           child: Container(
                             width: 40.0,
                             height: 40.0,
-                            padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
@@ -107,14 +89,12 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                                 ],
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(50)),
-                            child: Image.asset(
-                              'assets/images/feedback.png',
-                            ),
+                            child: Icon(Icons.arrow_back),
                           ),
                         ),
                       ),
                       Positioned(
-                        top: 130.0,
+                        top: 80.0,
                         child: GestureDetector(
                           onTap: () => _languageDialogBuilder(context),
                           child: Container(
@@ -144,10 +124,6 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                   width: MediaQuery.sizeOf(context).width * 0.8,
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.sizeOf(context).height * 0.02),
-                  decoration: BoxDecoration(
-                      color: Color.fromRGBO(94, 81, 233, 1),
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(30))),
                   child: Column(
                     children: [
                       Container(
@@ -183,7 +159,6 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                                   AppLocalizations.of(context)!.tumpang_air,
                                   style: TextStyle(
                                       fontSize: 20,
-                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: "DMSans"),
                                 ),
@@ -196,7 +171,6 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                                   "Peperomia pellucida",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: "DMSans"),
                                 ),
@@ -212,10 +186,10 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                               child: Text(
                                 _accuracy.toString() + "%",
                                 style: TextStyle(
-                                    fontFamily: "DMSans",
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                  fontFamily: "DMSans",
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           )
@@ -401,8 +375,8 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                         Container(
                           alignment: Alignment.centerLeft,
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: const Text(
-                            'Pilih Bahasa',
+                          child: Text(
+                            AppLocalizations.of(context)!.select_language,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.left,
@@ -413,8 +387,6 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                             "assets/images/logo_id.png", "Indonesia"),
                         _languageOption(setStateDialog,
                             "assets/images/logo_en.png", "English"),
-                        _languageOption(setStateDialog,
-                            "assets/images/logo_malay.png", "Malaysia"),
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
@@ -429,7 +401,7 @@ class _TumpangAirResult extends State<TumpangAirResult> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Text(
-                              'Terjemahkan',
+                              AppLocalizations.of(context)!.choose,
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -451,9 +423,17 @@ class _TumpangAirResult extends State<TumpangAirResult> {
       StateSetter setStateDialog, String assetPath, String language) {
     return GestureDetector(
       onTap: () {
-        setStateDialog(() {
+        final localeProvider =
+            Provider.of<LocaleProvider>(context, listen: false);
+        setState(() {
           _selectedLanguage = language;
         });
+
+        if (language == "Indonesia") {
+          localeProvider.setLocale(const Locale('id'));
+        } else if (language == "English") {
+          localeProvider.setLocale(const Locale('en'));
+        }
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 350),
@@ -464,7 +444,7 @@ class _TumpangAirResult extends State<TumpangAirResult> {
           border: Border.all(
             width: 2,
             color: (_selectedLanguage == language)
-                ? const Color.fromRGBO(194, 136, 248, 1)
+                ? const Color.fromRGBO(158, 179, 132, 1)
                 : Colors.grey,
           ),
           borderRadius: BorderRadius.circular(30),
