@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:leaves_classification_application/models/rumputMinjanganList.dart';
+import 'package:leaves_classification_application/provider/local_provider.dart';
 import 'package:leaves_classification_application/widgets/indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class RumputMinjanganResult extends StatefulWidget {
-  const RumputMinjanganResult({super.key});
+  final double accuracy;
+  const RumputMinjanganResult({super.key, required this.accuracy});
 
   @override
   State<StatefulWidget> createState() => _RumputMinjanganResult();
@@ -13,6 +16,7 @@ class RumputMinjanganResult extends StatefulWidget {
 
 class _RumputMinjanganResult extends State<RumputMinjanganResult> {
   final PageController _pageController = PageController(viewportFraction: 0.75);
+  late double _accuracy;
   int _currentPage = 0;
   String? _selectedLanguage;
   int _selectedRate = 0;
@@ -21,6 +25,7 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _accuracy = widget.accuracy;
 
     _pageController.addListener(() {
       final page = _pageController.page?.round() ?? 0;
@@ -63,14 +68,14 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
               children: [
                 Container(
                   width: MediaQuery.sizeOf(context).width * 0.2,
-                  height: MediaQuery.sizeOf(context).height * 0.4,
+                  height: MediaQuery.sizeOf(context).height * 0.3,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       Positioned(
                           top: 30.0,
                           child: GestureDetector(
-                            onTap: () => _languageDialogBuilder(context),
+                            onTap: () => {Navigator.pop(context)},
                             child: Container(
                               width: 40.0,
                               height: 40.0,
@@ -106,30 +111,6 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(50)),
                             child: Image.asset(
-                              'assets/images/feedback.png',
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 130.0,
-                        child: GestureDetector(
-                          onTap: () => _rateDialogBulider(context),
-                          child: Container(
-                            width: 40.0,
-                            height: 40.0,
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      offset: Offset(1, 1),
-                                      spreadRadius: 0.5,
-                                      blurRadius: 1)
-                                ],
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Image.asset(
                               'assets/images/language.png',
                             ),
                           ),
@@ -140,11 +121,82 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                 ),
                 Container(
                   width: MediaQuery.sizeOf(context).width * 0.8,
-                  height: MediaQuery.sizeOf(context).height * 0.4,
-                  decoration: BoxDecoration(
-                      color: Color.fromRGBO(94, 81, 233, 1),
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(30))),
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.sizeOf(context).height * 0.02),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 200,
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.sizeOf(context).width * 0.05),
+                        margin: EdgeInsets.only(
+                            top: MediaQuery.sizeOf(context).height * 0.05,
+                            bottom: MediaQuery.sizeOf(context).height * 0.015),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            "assets/images/rumput-minjangan.jpg",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: MediaQuery.sizeOf(context).width *
+                                        0.05),
+                                child: Text(
+                                  AppLocalizations.of(context)!
+                                      .rumput_minjangan,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "DMSans"),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: MediaQuery.sizeOf(context).width * 0.05,
+                                ),
+                                child: Text(
+                                  "Chromolaena odorata",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "DMSans"),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      MediaQuery.sizeOf(context).width * 0.08),
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                _accuracy.toString() + "%",
+                                style: TextStyle(
+                                  fontFamily: "DMSans",
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -153,10 +205,34 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
               width: MediaQuery.sizeOf(context).width,
               margin: EdgeInsets.only(top: 20.0),
               padding: EdgeInsets.only(
-                  left: MediaQuery.sizeOf(context).width * 0.15),
+                  left: MediaQuery.sizeOf(context).width * 0.05),
+              child: Text(
+                AppLocalizations.of(context)!.description,
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: "DMSans",
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: 14.0, fontFamily: "DMSans"),
+                  AppLocalizations.of(context)!.rumput_minjangan_description),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              width: MediaQuery.sizeOf(context).width,
+              margin: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.sizeOf(context).width * 0.05),
               child: Text(
                 AppLocalizations.of(context)!.benefit,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: "DMSans",
+                    fontWeight: FontWeight.bold),
               ),
             ),
             Container(
@@ -195,6 +271,7 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 15,
+                                          fontFamily: "DMSans",
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
@@ -209,6 +286,7 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 14,
+                                            fontFamily: "DMSans",
                                             fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.left,
                                       ),
@@ -257,269 +335,6 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                         isActive: _currentPage == index ? true : false))
               ],
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.only(top: 20.0),
-              padding: EdgeInsets.only(
-                  left: MediaQuery.sizeOf(context).width * 0.15),
-              child: Text(
-                AppLocalizations.of(context)!.how_to_process,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 239, 228, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '1',
-                      style: TextStyle(
-                          color: Color.fromRGBO(134, 164, 146, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                      child: Text(
-                    AppLocalizations.of(context)!.pegagan_process_1,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(236, 221, 252, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '2',
-                      style: TextStyle(
-                          color: Color.fromRGBO(182, 132, 230, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      AppLocalizations.of(context)!.pegagan_process_2,
-                      style: TextStyle(
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 239, 228, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '3',
-                      style: TextStyle(
-                          color: Color.fromRGBO(134, 164, 146, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                      child: Text(
-                    AppLocalizations.of(context)!.pegagan_process_3,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(236, 221, 252, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '4',
-                      style: TextStyle(
-                          color: Color.fromRGBO(182, 132, 230, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      AppLocalizations.of(context)!.pegagan_process_4,
-                      style: TextStyle(
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              padding: EdgeInsets.only(
-                  top: 20, bottom: 20.0, left: 10.0, right: 20.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 239, 228, 1),
-                  borderRadius: BorderRadius.circular(30.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: const Offset(
-                        0.0,
-                        4.0,
-                      ),
-                      blurStyle: BlurStyle.inner,
-                      blurRadius: 15.0,
-                      spreadRadius: 0.5,
-                    ), //BoxShadow
-                  ]),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                    width: 40.0,
-                    height: 40.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100.0)),
-                    child: Text(
-                      '5',
-                      style: TextStyle(
-                          color: Color.fromRGBO(134, 164, 146, 1),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Flexible(
-                      child: Text(
-                    AppLocalizations.of(context)!.pegagan_process_5,
-                    style: TextStyle(
-                      fontSize: 15.0,
-                    ),
-                  ))
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -560,8 +375,8 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                         Container(
                           alignment: Alignment.centerLeft,
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: const Text(
-                            'Pilih Bahasa',
+                          child: Text(
+                            AppLocalizations.of(context)!.select_language,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.left,
@@ -572,8 +387,6 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                             "assets/images/logo_id.png", "Indonesia"),
                         _languageOption(setStateDialog,
                             "assets/images/logo_en.png", "English"),
-                        _languageOption(setStateDialog,
-                            "assets/images/logo_malay.png", "Malaysia"),
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
@@ -588,7 +401,7 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Text(
-                              'Terjemahkan',
+                              AppLocalizations.of(context)!.choose,
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -610,9 +423,17 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
       StateSetter setStateDialog, String assetPath, String language) {
     return GestureDetector(
       onTap: () {
-        setStateDialog(() {
+        final localeProvider =
+            Provider.of<LocaleProvider>(context, listen: false);
+        setState(() {
           _selectedLanguage = language;
         });
+
+        if (language == "Indonesia") {
+          localeProvider.setLocale(const Locale('id'));
+        } else if (language == "English") {
+          localeProvider.setLocale(const Locale('en'));
+        }
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 350),
@@ -623,7 +444,7 @@ class _RumputMinjanganResult extends State<RumputMinjanganResult> {
           border: Border.all(
             width: 2,
             color: (_selectedLanguage == language)
-                ? const Color.fromRGBO(194, 136, 248, 1)
+                ? const Color.fromRGBO(158, 179, 132, 1)
                 : Colors.grey,
           ),
           borderRadius: BorderRadius.circular(30),

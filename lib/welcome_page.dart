@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:leaves_classification_application/camera_page.dart';
+import 'package:leaves_classification_application/provider/local_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -43,34 +46,6 @@ class _WelcomePage extends State<WelcomePage> {
                 alignment: Alignment.bottomCenter,
               ),
             ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Logo Lama
-                AnimatedOpacity(
-                  duration: const Duration(seconds: 1),
-                  opacity: _startAnimation ? 0 : 1,
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    width: 200,
-                    height: 200,
-                  ),
-                ),
-
-                // Logo Baru
-                AnimatedOpacity(
-                    duration: const Duration(seconds: 2),
-                    opacity: _startAnimation ? 1 : 0,
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      child: Image.asset(
-                        'assets/images/logo2.png', // Ganti dengan path logo baru
-                        width: 150, // Sesuaikan ukuran logo baru
-                        height: 150,
-                      ),
-                    )),
-              ],
-            ),
           ),
           Stack(
             children: [
@@ -105,8 +80,8 @@ class _WelcomePage extends State<WelcomePage> {
                   children: <Widget>[
                     Container(
                       margin: const EdgeInsets.only(top: 30.0),
-                      child: const Text(
-                        'Select Language',
+                      child: Text(
+                        AppLocalizations.of(context)!.select_language,
                         style: TextStyle(
                             fontSize: 30.0, fontWeight: FontWeight.bold),
                       ),
@@ -130,8 +105,6 @@ class _WelcomePage extends State<WelcomePage> {
                           _languageOption(
                               "assets/images/logo_id.png", "Indonesia"),
                           _languageOption(
-                              "assets/images/logo_malay.png", "Malaysia"),
-                          _languageOption(
                               "assets/images/logo_en.png", "English"),
                           const SizedBox(height: 20),
                           AnimatedOpacity(
@@ -139,16 +112,49 @@ class _WelcomePage extends State<WelcomePage> {
                             duration: const Duration(seconds: 1),
                             child: SizedBox(
                                 child: Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const CameraPage()));
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (_selectedLanguage == null ||
+                                      _selectedLanguage!.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'Please select one of the languages'),
+                                        duration: Duration(milliseconds: 500),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const CameraPage()));
+                                  }
                                 },
-                                style: style,
-                                child: const Text("Continue"),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: MediaQuery.sizeOf(context).width * 0.3,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Color.fromRGBO(158, 179, 132, 1),
+                                          Color.fromRGBO(68, 77, 57, 1)
+                                        ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        stops: [0, 1.0]),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.choose,
+                                    style: TextStyle(
+                                        fontFamily: "DMSans",
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ),
                               ),
                             )),
                           )
@@ -162,9 +168,8 @@ class _WelcomePage extends State<WelcomePage> {
                 child: _startAnimation
                     ? const SizedBox()
                     : SizedBox(
-                        child: Center(
-                        child: ElevatedButton(
-                          onPressed: () {
+                        child: GestureDetector(
+                          onTap: () {
                             setState(() {
                               _startAnimation = !_startAnimation;
                             });
@@ -177,10 +182,32 @@ class _WelcomePage extends State<WelcomePage> {
                               });
                             });
                           },
-                          style: style,
-                          child: const Text("Start Now"),
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.sizeOf(context).width * 0.3,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromRGBO(158, 179, 132, 1),
+                                    Color.fromRGBO(68, 77, 57, 1)
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  stops: [0, 1.0]),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              "Start Now",
+                              style: TextStyle(
+                                  fontFamily: "DMSans",
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
                         ),
-                      )),
+                      ),
               ),
             ],
           )
@@ -192,9 +219,17 @@ class _WelcomePage extends State<WelcomePage> {
   Widget _languageOption(String assetPath, String language) {
     return GestureDetector(
       onTap: () {
+        final localeProvider =
+            Provider.of<LocaleProvider>(context, listen: false);
         setState(() {
           _selectedLanguage = language;
         });
+
+        if (language == "Indonesia") {
+          localeProvider.setLocale(const Locale('id'));
+        } else if (language == "English") {
+          localeProvider.setLocale(const Locale('en'));
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
@@ -204,7 +239,7 @@ class _WelcomePage extends State<WelcomePage> {
           border: Border.all(
             width: 2,
             color: (_selectedLanguage == language)
-                ? const Color.fromRGBO(194, 136, 248, 1)
+                ? const Color.fromRGBO(158, 179, 132, 1)
                 : Colors.grey,
           ),
           borderRadius: BorderRadius.circular(30),

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:leaves_classification_application/models/tumpangAirList.dart';
+import 'package:leaves_classification_application/models/sembungRambatList.dart';
+import 'package:leaves_classification_application/provider/local_provider.dart';
 import 'package:leaves_classification_application/widgets/indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
-class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
+class SembungRambatResult extends StatefulWidget {
+  final double accuracy;
+  const SembungRambatResult({super.key, required this.accuracy});
 
   @override
-  State<StatefulWidget> createState() => _ResultPage();
+  State<StatefulWidget> createState() => _SembungRambatResult();
 }
 
-class _ResultPage extends State<ResultPage> {
+class _SembungRambatResult extends State<SembungRambatResult> {
   final PageController _pageController = PageController(viewportFraction: 0.75);
+  late double _accuracy;
   int _currentPage = 0;
   String? _selectedLanguage;
   int _selectedRate = 0;
@@ -21,6 +25,7 @@ class _ResultPage extends State<ResultPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _accuracy = widget.accuracy;
 
     _pageController.addListener(() {
       final page = _pageController.page?.round() ?? 0;
@@ -133,7 +138,7 @@ class _ResultPage extends State<ResultPage> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
-                            "assets/images/tumpang-air.jpg",
+                            "assets/images/sembung-rambat.jpg",
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -150,7 +155,7 @@ class _ResultPage extends State<ResultPage> {
                                     left: MediaQuery.sizeOf(context).width *
                                         0.05),
                                 child: Text(
-                                  AppLocalizations.of(context)!.tumpang_air,
+                                  AppLocalizations.of(context)!.sembung_rambat,
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -162,7 +167,7 @@ class _ResultPage extends State<ResultPage> {
                                   left: MediaQuery.sizeOf(context).width * 0.05,
                                 ),
                                 child: Text(
-                                  "Peperomia pellucida",
+                                  "Mikania micrantha",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -178,7 +183,7 @@ class _ResultPage extends State<ResultPage> {
                                       MediaQuery.sizeOf(context).width * 0.08),
                               alignment: Alignment.centerRight,
                               child: Text(
-                                "100%",
+                                _accuracy.toString() + "%",
                                 style: TextStyle(
                                   fontFamily: "DMSans",
                                   fontSize: 15,
@@ -213,7 +218,7 @@ class _ResultPage extends State<ResultPage> {
               child: Text(
                   textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 14.0, fontFamily: "DMSans"),
-                  AppLocalizations.of(context)!.tumpang_air_description),
+                  AppLocalizations.of(context)!.sembung_rambat_description),
             ),
             Container(
               alignment: Alignment.centerLeft,
@@ -235,10 +240,10 @@ class _ResultPage extends State<ResultPage> {
                   0.7, // Tinggi yang diinginkan
               margin: EdgeInsets.symmetric(vertical: 1.0),
               child: PageView.builder(
-                itemCount: TumpangAirList.length,
+                itemCount: SembungRambatList.length,
                 controller: _pageController,
                 itemBuilder: (context, index) {
-                  final plant = TumpangAirList[index];
+                  final plant = SembungRambatList[index];
                   var _scale = index == _currentPage ? 1.0 : 0.9;
                   return TweenAnimationBuilder(
                       tween: Tween(begin: _scale, end: _scale),
@@ -324,7 +329,7 @@ class _ResultPage extends State<ResultPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ...List.generate(
-                    TumpangAirList.length,
+                    SembungRambatList.length,
                     (index) => Indicator(
                         isActive: _currentPage == index ? true : false))
               ],
@@ -369,8 +374,8 @@ class _ResultPage extends State<ResultPage> {
                         Container(
                           alignment: Alignment.centerLeft,
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: const Text(
-                            'Pilih Bahasa',
+                          child: Text(
+                            AppLocalizations.of(context)!.select_language,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.left,
@@ -395,7 +400,7 @@ class _ResultPage extends State<ResultPage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Text(
-                              'Terjemahkan',
+                              AppLocalizations.of(context)!.choose,
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -417,9 +422,17 @@ class _ResultPage extends State<ResultPage> {
       StateSetter setStateDialog, String assetPath, String language) {
     return GestureDetector(
       onTap: () {
-        setStateDialog(() {
+        final localeProvider =
+            Provider.of<LocaleProvider>(context, listen: false);
+        setState(() {
           _selectedLanguage = language;
         });
+
+        if (language == "Indonesia") {
+          localeProvider.setLocale(const Locale('id'));
+        } else if (language == "English") {
+          localeProvider.setLocale(const Locale('en'));
+        }
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 350),
@@ -430,7 +443,7 @@ class _ResultPage extends State<ResultPage> {
           border: Border.all(
             width: 2,
             color: (_selectedLanguage == language)
-                ? const Color.fromRGBO(194, 136, 248, 1)
+                ? const Color.fromRGBO(158, 179, 132, 1)
                 : Colors.grey,
           ),
           borderRadius: BorderRadius.circular(30),
